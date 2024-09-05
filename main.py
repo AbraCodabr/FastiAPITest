@@ -8,11 +8,13 @@ from fastapi.staticfiles import StaticFiles
 import uvicorn
 
 app = FastAPI()
-app.mount("/", StaticFiles(directory="static"), name="static")
 
-@app.get("/home")
-def get_task():
-    return "НЕ НАЧАЛЬНАЯ СТРАНИЦА"     
+# @app.get("/home")
+# def get_task():
+#     return {"details": "НЕ НАЧАЛЬНАЯ СТРАНИЦА"}     
+
+#по умолчанию открывает фаил индекс 
+app.mount("/", StaticFiles(directory="static", html=True))
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
