@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{url_for('static', path='/css/tasks.css')}}" />
+    <title>Профиль</title>
+  </head>
+  <body>
+    <div class="container">
+      <!-- 1 блок -->
+      <h3>Task list</h3>
+      <form class="form" method="post">
+        <input
+          class="ad enter_text"
+          name="input"
+          type="text"
+          placeholder="Enter text ..."
+        />
+        <button class="ad add_task" name="submit" type="submit">
+          ADD TASK
+        </button>
+      </form>
+
+      <div class="button_all">
+        <form action="" method="post">
+          <button class="button_content">REMOVE ALL</button>
+        </form>
+        <form action="" method="post">
+          <button class="button_content">READY ALL</button>
+        </form>
+      </div>
+
+      <!-- 2 блок -->
+      <!-- Цикл по ответу из БД -->
+      <div class="content">
+        <!-- Текст заметки -->
+        <p class="text"></p>
+        <!-- Вывод кнопок. Текст в кнопке меняется в зависимости от статуса -->
+        <div class="button">
+          <form action="" method="post">
+            <button class="button_content" name="" type="">UPDATE</button>
+          </form>
+          <!-- Удаление заметки -->
+          <form action="" method="post">
+            <button class="button_content" name="" type="">DELETE</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

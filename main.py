@@ -1,21 +1,26 @@
-#-----------------------------------------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# Licensed under the MIT License. See LICENSE in the project root for license information.
-#-----------------------------------------------------------------------------------------
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 import uvicorn
+from database import create_tables
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await create_tables()
+    print("База готова")  
+    yield
+    print("Выключение")
 
-# @app.get("/home")
-# def get_task():
-#     return {"details": "НЕ НАЧАЛЬНАЯ СТРАНИЦА"}     
+app = FastAPI(lifespan=lifespan)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-#по умолчанию открывает фаил индекс 
-app.mount("/", StaticFiles(directory="static", html=True))
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/")
+def get_task(request: Request):
+    return templates.TemplateResponse(name='index.html', context={'request': request})   
 
 if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
-

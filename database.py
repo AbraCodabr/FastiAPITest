@@ -1,21 +1,27 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import  Column, Integer, String
+from typing import Optional
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./database.db"
+SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite:///tasks.db"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_async_engine(SQLALCHEMY_DATABASE_URL)
 
-class Base(DeclarativeBase):
+new_session = async_sessionmaker(engine, expire_on_commit=False)
+
+class Model(DeclarativeBase):
     pass
 
-class Task(Base):
-    __tablename__ = "Task"
-    id: Column(Integer, primery_key=True, index=True)
-    name: Column(String)
-    task: Column(String)
+class Tasks(Model):
+    __tablename__ = "Tasks"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    description: Mapped[str]
 
-Base.metadata.create_all(bind=engine)
+
+async def create_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(Model.metadata.create_all)
 
 
 
